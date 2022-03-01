@@ -7,7 +7,7 @@ import styles from "../styles/Home.module.css";
 const NEXT_PUBLIC_API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const resp = await fetch(`${NEXT_PUBLIC_API_URL}/index.json`);
 
   return {

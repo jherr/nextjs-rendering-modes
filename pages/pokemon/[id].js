@@ -8,7 +8,17 @@ const NEXT_PUBLIC_API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 // https://jherr-pokemon.s3.us-west-1.amazonaws.com
 
-export async function getServerSideProps({ params }) {
+export async function getStaticPaths() {
+  const resp = await fetch(`${NEXT_PUBLIC_API_URL}/index.json`);
+  const pokemon = await resp.json();
+
+  return {
+    paths: pokemon.map(({ id }) => ({ params: { id: id.toString() } })),
+    fallback: false,
+  };
+}
+
+export async function getStaticProps({ params }) {
   const resp = await fetch(`${NEXT_PUBLIC_API_URL}/pokemon/${params.id}.json`);
   return {
     props: {
