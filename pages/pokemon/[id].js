@@ -5,6 +5,10 @@ import Head from "next/head";
 import Link from "next/link";
 import styles from "../../styles/Detail.module.css";
 
+const NEXT_PUBLIC_API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+// https://jherr-pokemon.s3.us-west-1.amazonaws.com
+
 export default function Detail() {
   const {
     query: { id },
@@ -14,7 +18,7 @@ export default function Detail() {
 
   useEffect(() => {
     async function getPokemon() {
-      const resp = await fetch(`http://localhost:8080/pokemon/${id}.json`);
+      const resp = await fetch(`${NEXT_PUBLIC_API_URL}/pokemon/${id}.json`);
       setPokemon(await resp.json());
     }
     if (id) {
@@ -40,7 +44,7 @@ export default function Detail() {
         <div>
           <img
             className={styles.picture}
-            src={`http://localhost:8080/${pokemon.image}`}
+            src={`${NEXT_PUBLIC_API_URL}/${pokemon.image}`}
             alt={pokemon.name.english}
           />
         </div>
