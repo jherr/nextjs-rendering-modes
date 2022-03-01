@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Head from "next/head";
 import Link from "next/link";
 import styles from "../../styles/Detail.module.css";
@@ -9,23 +8,16 @@ const NEXT_PUBLIC_API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 // https://jherr-pokemon.s3.us-west-1.amazonaws.com
 
-export default function Detail() {
-  const {
-    query: { id },
-  } = useRouter();
+export async function getServerSideProps({ params }) {
+  const resp = await fetch(`${NEXT_PUBLIC_API_URL}/pokemon/${params.id}.json`);
+  return {
+    props: {
+      pokemon: await resp.json(),
+    },
+  };
+}
 
-  const [pokemon, setPokemon] = useState(null);
-
-  useEffect(() => {
-    async function getPokemon() {
-      const resp = await fetch(`${NEXT_PUBLIC_API_URL}/pokemon/${id}.json`);
-      setPokemon(await resp.json());
-    }
-    if (id) {
-      getPokemon();
-    }
-  }, [id]);
-
+export default function Detail({ pokemon }) {
   if (!pokemon) {
     return null;
   }
